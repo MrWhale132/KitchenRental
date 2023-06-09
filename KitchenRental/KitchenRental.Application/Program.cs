@@ -3,6 +3,7 @@ using KitchenRental.BusinessLogic.Contracts.Services;
 using KitchenRental.BusinessLogic.Services;
 using KitchenRental.DataAccess;
 using KitchenRental.DataAccess.DataManagers.RentalKitchenDataManager;
+using KitchenRental.DataAccess.Mappers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace KitchenRental.Application
 			builder.Services.AddDbContext<DataContext>(
 				options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 			builder.Services.AddSingleton<SequenceProvider>();
+			builder.Services.AddSingleton<RentalKitchenDtoBlaMapper>();
 			builder.Services.AddScoped<IRentalKitchenDataManager, RentalKitchenDataManager>();
 			builder.Services.AddScoped<IRentalKitchenService, RentalKitchenService>();
 
