@@ -4,7 +4,9 @@ using KitchenRental.BusinessLogic.Services;
 using KitchenRental.DataAccess;
 using KitchenRental.DataAccess.DataManagers.RentalKitchenDataManager;
 using KitchenRental.DataAccess.Mappers;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,39 +18,12 @@ namespace KitchenRental.Application
 	{
 		public static void Main(string[] args)
 		{
-			var builder = WebApplication.CreateBuilder(args);
+			CreateWebHostBuilder(args).Build().Run();
+		}
 
-			// Add services to the container.
-			builder.Services.AddControllers();
-			builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
-
-			builder.Services.AddDbContext<DataContext>(
-				options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-			builder.Services.AddSingleton<SequenceProvider>();
-			builder.Services.AddSingleton<RentalKitchenDtoBlaMapper>();
-			builder.Services.AddScoped<IRentalKitchenDataManager, RentalKitchenDataManager>();
-			builder.Services.AddScoped<IRentalKitchenService, RentalKitchenService>();
-
-			var app = builder.Build();
-
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
-
-			app.UseHttpsRedirection();
-
-			app.UseRouting();
-
-			app.UseAuthorization();
-
-			app.UseEndpoints(endpoints => endpoints.MapControllers());
-
-			app.Run();
+		public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+		{
+			return WebHost.CreateDefaultBuilder(args).UseStartup<Startup>();
 		}
 	}
 }
