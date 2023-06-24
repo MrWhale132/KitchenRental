@@ -27,10 +27,11 @@ namespace KitchenRental.BusinessLogic.Services
 			return await _rentalKitchenDataManager.GetById(id);
 		}
 
-		public async Task Create(RentalKitchenBla kitchenBla)
+		public async Task<int> Create(RentalKitchenBla kitchenBla)
 		{
 			kitchenBla.Id = _sequenceProvider.Next();
 			await _rentalKitchenDataManager.Create(kitchenBla);
+			return kitchenBla.Id;
 		}
 
 		public async Task Update(RentalKitchenBla kitchenBla)

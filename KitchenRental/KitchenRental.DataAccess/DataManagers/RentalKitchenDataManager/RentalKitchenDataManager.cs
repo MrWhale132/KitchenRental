@@ -4,6 +4,7 @@ using KitchenRental.DataAccess.Mappers;
 using KitchenRental.DataAccess.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,11 +43,19 @@ namespace KitchenRental.DataAccess.DataManagers.RentalKitchenDataManager
 			await _dataContext.SaveChangesAsync();
 		}
 
-		public async Task Update(RentalKitchenBla kitchenBla)
+		public async Task Update([NotNull]RentalKitchenBla updateRequestBla)
 		{
-			var dto = _mapper.Map(kitchenBla);
+			var updateRequestDto = _mapper.Map(updateRequestBla);
+			var existingDto = await _dataContext.RentalKitchens.SingleOrDefaultAsync(x => x.Id == updateRequestDto.Id);
 
-			_dataContext.RentalKitchens.Update(dto);
+			existingDto.Name = updateRequestDto.Name == null ? existingDto.Name : updateRequestDto.Name;
+			existingDto.Description = updateRequestDto.Description == null ? existingDto.Description : updateRequestDto.Description;
+			existingDto.RentPricePerMinute = updateRequestDto.RentPricePerMinute == 0 ? existingDto.RentPricePerMinute : updateRequestDto.RentPricePerMinute;
+			existingDto.WorkingArea = updateRequestDto.WorkingArea == 0 ? existingDto.WorkingArea : updateRequestDto.WorkingArea;
+			existingDto.FloorArea = updateRequestDto.FloorArea == 0 ? existingDto.FloorArea : updateRequestDto.FloorArea;
+			existingDto.Equipments = updateRequestDto.Equipments == null ? existingDto.Equipments : updateRequestDto.Equipments;
+
+			_dataContext.RentalKitchens.Update(existingDto);
 
 			await _dataContext.SaveChangesAsync();
 		}

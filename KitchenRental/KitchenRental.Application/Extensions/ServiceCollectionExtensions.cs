@@ -1,4 +1,5 @@
-﻿using KitchenRental.BusinessLogic.Contracts.DataAccess;
+﻿using KitchenRental.Application.Mappers;
+using KitchenRental.BusinessLogic.Contracts.DataAccess;
 using KitchenRental.BusinessLogic.Contracts.Services;
 using KitchenRental.BusinessLogic.Services;
 using KitchenRental.DataAccess;
@@ -28,10 +29,18 @@ namespace KitchenRental.Application.Extensions
 		public static IServiceCollection AddBuisnessLayer(this IServiceCollection services)
 		{
 			return services
+				  .AddMappers()
 				  .AddSingleton<SequenceProvider>()
 				  .AddSingleton<RentalKitchenDtoBlaMapper>()
 				  .AddScoped<IRentalKitchenDataManager, RentalKitchenDataManager>()
 				  .AddScoped<IRentalKitchenService, RentalKitchenService>();
+		}
+
+		private static IServiceCollection AddMappers(this IServiceCollection services)
+		{
+			return services
+				  .AddSingleton<RentalKitchenRequestToBlaToResponseData>()
+				  .AddSingleton<RentalKitchenDtoBlaMapper>();
 		}
 	}
 }

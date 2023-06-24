@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\KitchenRental.BusinessLogic\KitchenRental.BusinessLogic.csproj" />
     <ProjectReference Include="..\KitchenRental.DataAccess\KitchenRental.DataAccess.csproj" />
   </ItemGroup>

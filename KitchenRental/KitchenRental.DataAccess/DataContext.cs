@@ -16,7 +16,9 @@ namespace KitchenRental.DataAccess
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
-			builder.Entity<RentalKitchenDto>()
+			var entity = builder.Entity<RentalKitchenDto>();
+
+			entity
 				.Property(p => p.Equipments)
 				.HasConversion(
 					toDb => string.Join(',', toDb),
