@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenRental.Application", "KitchenRental.Application\KitchenRental.Application.csproj", "{3DEA67E9-2511-4799-8D2B-9974B2D8ECAF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{525AB319-17A2-4B8F-A01B-96E479345A92} = {525AB319-17A2-4B8F-A01B-96E479345A92}
+		{5D61DD50-B7AB-4FA3-8A58-F562B99F28E0} = {5D61DD50-B7AB-4FA3-8A58-F562B99F28E0}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenRental.BusinessLogic", "KitchenRental.BusinessLogic\KitchenRental.BusinessLogic.csproj", "{538BBDF0-785D-47AE-8CF1-F927D9DACC84}"
@@ -14,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenRental.DataAccess", 
 	ProjectSection(ProjectDependencies) = postProject
 		{538BBDF0-785D-47AE-8CF1-F927D9DACC84} = {538BBDF0-785D-47AE-8CF1-F927D9DACC84}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KitchenRental.Sdk", "RentalKitchen.Sdk\KitchenRental.Sdk.csproj", "{5D61DD50-B7AB-4FA3-8A58-F562B99F28E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +36,10 @@ Global
 		{525AB319-17A2-4B8F-A01B-96E479345A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{525AB319-17A2-4B8F-A01B-96E479345A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{525AB319-17A2-4B8F-A01B-96E479345A92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D61DD50-B7AB-4FA3-8A58-F562B99F28E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D61DD50-B7AB-4FA3-8A58-F562B99F28E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D61DD50-B7AB-4FA3-8A58-F562B99F28E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D61DD50-B7AB-4FA3-8A58-F562B99F28E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
