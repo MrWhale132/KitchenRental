@@ -2,6 +2,6 @@
 {
 	public class CreateRentalKitchenResponseData
 	{
-		public int Id { get; set; }
+		public int ReservedId { get; set; }
 	}
 }

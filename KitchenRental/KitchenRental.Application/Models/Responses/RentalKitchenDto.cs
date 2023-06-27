@@ -2,7 +2,7 @@
 
 namespace KitchenRental.Application.Models.Responses
 {
-	public class GetRentalKitchenResponseData
+	public class RentalKitchenDto
 	{
 		public int Id { get; set; }
 		public string Name { get; set; }

@@ -2,8 +2,9 @@
 using KitchenRental.Application.Models.Requests;
 using KitchenRental.Application.Models.Responses;
 using KitchenRental.BusinessLogic.Contracts.Services;
+using KitchenRental.Sdk;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,13 +26,16 @@ namespace KitchenRental.Application.Controllers
 		{
 			var kitchensBla = await _rentalKitchenService.GetAll();
 
-			var response = new RentalKitchenResponse<IEnumerable<GetRentalKitchenResponseData>>
+			var response = new RentalKitchenResponse<GetAllResponseData>
 			{
 				StatusCode = 200,
-				Data = kitchensBla.Select(_mapper.Map)
+				Data = new GetAllResponseData
+				{
+					Kitchens = kitchensBla.Select(_mapper.Map)
+				}
 			};
 
-			return new JsonResult(response) { StatusCode = 200};
+			return new JsonResult(response) { StatusCode = 200 };
 		}
 
 		[HttpGet("kitchenrental/rentalkitchens/{id}")]
@@ -39,10 +43,13 @@ namespace KitchenRental.Application.Controllers
 		{
 			var kitchenBla = await _rentalKitchenService.GetById(id);
 
-			var response = new RentalKitchenResponse<GetRentalKitchenResponseData>
+			var response = new RentalKitchenResponse<GetByIdResponseData>
 			{
 				StatusCode = 200,
-				Data = _mapper.Map(kitchenBla)
+				Data = new GetByIdResponseData
+				{
+					Kitchen = _mapper.Map(kitchenBla)
+				}
 			};
 
 			return new JsonResult(response) { StatusCode = 200 };
@@ -60,7 +67,7 @@ namespace KitchenRental.Application.Controllers
 				StatusCode = 201,
 				Data = new CreateRentalKitchenResponseData
 				{
-					Id = reservedId
+					ReservedId = reservedId
 				}
 			};
 
@@ -71,13 +78,13 @@ namespace KitchenRental.Application.Controllers
 		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalKitchenRequest updateRequest)
 		{
 			var kitchenBla = _mapper.Map(updateRequest);
-			kitchenBla.Id= id;
+			kitchenBla.Id = id;
 
 			await _rentalKitchenService.Update(kitchenBla);
 
 			var response = new RentalKitchenResponse<NoDataResponse>
 			{
-				StatusCode = 200
+				StatusCode = 204
 			};
 
 			return new JsonResult(response) { StatusCode = 204 };
@@ -90,7 +97,7 @@ namespace KitchenRental.Application.Controllers
 
 			var response = new RentalKitchenResponse<NoDataResponse>
 			{
-				StatusCode = 200
+				StatusCode = 204
 			};
 
 			return new JsonResult(response) { StatusCode = 204 };

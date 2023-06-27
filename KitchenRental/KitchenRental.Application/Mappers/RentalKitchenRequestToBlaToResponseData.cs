@@ -32,9 +32,9 @@ namespace KitchenRental.Application.Mappers
 			};
 		}
 
-		public GetRentalKitchenResponseData Map(RentalKitchenBla bla)
+		public RentalKitchenDto Map(RentalKitchenBla bla)
 		{
-			return new GetRentalKitchenResponseData
+			return new RentalKitchenDto
 			{
 				Id = bla.Id,
 				Description = bla.Description,

@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   
@@ -18,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\KitchenRental.BusinessLogic\KitchenRental.BusinessLogic.csproj" />
     <ProjectReference Include="..\KitchenRental.DataAccess\KitchenRental.DataAccess.csproj" />
+    <ProjectReference Include="..\RentalKitchen.Sdk\KitchenRental.Sdk.csproj" />
   </ItemGroup>
 
 </Project>
