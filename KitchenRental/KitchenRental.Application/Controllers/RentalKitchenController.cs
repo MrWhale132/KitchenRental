@@ -2,9 +2,9 @@
 using KitchenRental.Application.Models.Requests;
 using KitchenRental.Application.Models.Responses;
 using KitchenRental.BusinessLogic.Contracts.Services;
-using KitchenRental.Sdk;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,18 +12,22 @@ namespace KitchenRental.Application.Controllers
 {
 	public class RentalKitchenController : ControllerBase
 	{
+		private readonly ILogger<RentalKitchenController> _logger;
 		private readonly IRentalKitchenService _rentalKitchenService;
 		private readonly RentalKitchenRequestToBlaToResponseData _mapper;
 
-		public RentalKitchenController(IRentalKitchenService rentalKitchenService, RentalKitchenRequestToBlaToResponseData mapper)
+		public RentalKitchenController(IRentalKitchenService rentalKitchenService, RentalKitchenRequestToBlaToResponseData mapper, ILogger<RentalKitchenController> logger)
 		{
 			_rentalKitchenService = rentalKitchenService;
 			_mapper = mapper;
+			_logger = logger;
 		}
 
 		[HttpGet("kitchenrental/rentalkitchens")]
 		public async Task<IActionResult> GetAll()
 		{
+			_logger.LogInformation($"{nameof(GetAll)} started processing");
+
 			var kitchensBla = await _rentalKitchenService.GetAll();
 
 			var response = new RentalKitchenResponse<GetAllResponseData>
@@ -34,6 +38,8 @@ namespace KitchenRental.Application.Controllers
 					Kitchens = kitchensBla.Select(_mapper.Map)
 				}
 			};
+
+			_logger.LogInformation($"{nameof(GetAll)} finished processing");
 
 			return new JsonResult(response) { StatusCode = 200 };
 		}
