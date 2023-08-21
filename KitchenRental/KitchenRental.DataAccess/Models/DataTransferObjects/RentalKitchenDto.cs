@@ -14,6 +14,6 @@ namespace KitchenRental.DataAccess.Models.DataTransferObjects
 		public int FloorArea { get; set; }
 		public int WorkingArea { get; set; }
 		public double RentPricePerMinute { get; set; }
-		public List<string> Equipments { get; set; } = new List<string>();
+		public List<EquipmentDto> Equipments { get; set; } = new List<EquipmentDto>();
 	}
 }

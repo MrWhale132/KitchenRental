@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using KitchenRental.Application.Models.Responses;
+using System.Collections.Generic;
 
 namespace KitchenRental.Application.Models.Requests
 {
@@ -9,6 +10,6 @@ namespace KitchenRental.Application.Models.Requests
 		public int FloorArea { get; set; }
 		public int WorkingArea { get; set; }
 		public double RentPricePerMinute { get; set; }
-		public List<string> Equipments { get; set; }
+		public List<EquipmentDto> Equipments { get; set; }
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using KitchenRental.BusinessLogic.Models.BusinessLogicAdapters;
 using KitchenRental.DataAccess.Models.DataTransferObjects;
+using System.Linq;
 
 namespace KitchenRental.DataAccess.Mappers
 {
@@ -11,7 +12,7 @@ namespace KitchenRental.DataAccess.Mappers
 			{
 				Id = dto.Id,
 				Description = dto.Description,
-				Equipments = dto.Equipments,
+				Equipments = dto.Equipments?.Select(x => new EquipmentBla { Id = x.Id, Name = x.Name }).ToList(),
 				FloorArea = dto.FloorArea,
 				Name = dto.Name,
 				RentPricePerMinute = dto.RentPricePerMinute,
@@ -25,11 +26,11 @@ namespace KitchenRental.DataAccess.Mappers
 			{
 				Id = bla.Id,
 				Description = bla.Description,
-				Equipments= bla.Equipments,
+				Equipments = bla.Equipments?.Select(x => new EquipmentDto { Id = x.Id, Name = x.Name }).ToList(),
 				FloorArea = bla.FloorArea,
 				Name = bla.Name,
 				RentPricePerMinute = bla.RentPricePerMinute,
-				WorkingArea= bla.WorkingArea
+				WorkingArea = bla.WorkingArea
 			};
 		}
 	}

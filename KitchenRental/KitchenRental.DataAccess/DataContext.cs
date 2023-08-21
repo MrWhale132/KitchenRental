@@ -1,7 +1,5 @@
 ﻿using KitchenRental.DataAccess.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System;
 
 namespace KitchenRental.DataAccess
 {
@@ -13,16 +11,7 @@ namespace KitchenRental.DataAccess
 		}
 
 		public DbSet<RentalKitchenDto> RentalKitchens { get; set; }
+		public DbSet<EquipmentDto> Equipments { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder builder)
-		{
-			var entity = builder.Entity<RentalKitchenDto>();
-
-			entity
-				.Property(p => p.Equipments)
-				.HasConversion(
-					toDb => string.Join(',', toDb),
-					fromDb => fromDb.Split(',', StringSplitOptions.None).ToList());
-		}
 	}
 }

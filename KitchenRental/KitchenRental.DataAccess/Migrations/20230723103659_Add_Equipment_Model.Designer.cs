@@ -4,6 +4,7 @@ using KitchenRental.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KitchenRental.DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230723103659_Add_Equipment_Model")]
+    partial class Add_Equipment_Model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +45,7 @@ namespace KitchenRental.DataAccess.Migrations
 
                     b.HasIndex("RentalKitchenDtoId");
 
-                    b.ToTable("Equipments");
+                    b.ToTable("EquipmentDto");
                 });
 
             modelBuilder.Entity("KitchenRental.DataAccess.Models.DataTransferObjects.RentalKitchenDto", b =>
@@ -51,12 +54,14 @@ namespace KitchenRental.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FloorArea")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("RentPricePerMinute")

@@ -10,6 +10,6 @@ namespace KitchenRental.BusinessLogic.Models.BusinessLogicAdapters
 		public int FloorArea { get; set; }
 		public int WorkingArea { get; set; }
 		public double RentPricePerMinute { get; set; }
-		public List<string> Equipments { get; set; }
+		public List<EquipmentBla> Equipments { get; set; }
 	}
 }

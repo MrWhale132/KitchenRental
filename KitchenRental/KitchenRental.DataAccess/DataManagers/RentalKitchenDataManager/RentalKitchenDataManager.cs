@@ -4,7 +4,6 @@ using KitchenRental.DataAccess.Mappers;
 using KitchenRental.DataAccess.Models.DataTransferObjects;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,13 +22,18 @@ namespace KitchenRental.DataAccess.DataManagers.RentalKitchenDataManager
 
 		public async Task<IEnumerable<RentalKitchenBla>> GetAll()
 		{
-			var dtos = await _dataContext.RentalKitchens.ToListAsync();
+
+
+
+
+
+			var dtos = await _dataContext.RentalKitchens.Include(x => x.Equipments).ToListAsync();
 			return dtos.Select(_mapper.Map);
 		}
 
 		public async Task<RentalKitchenBla> GetById(int id)
 		{
-			var dto = await _dataContext.RentalKitchens.SingleOrDefaultAsync(x => x.Id == id);
+			var dto = await _dataContext.RentalKitchens.Include(x => x.Equipments).SingleOrDefaultAsync(x => x.Id == id);
 
 			return _mapper.Map(dto);
 		}
@@ -43,17 +47,16 @@ namespace KitchenRental.DataAccess.DataManagers.RentalKitchenDataManager
 			await _dataContext.SaveChangesAsync();
 		}
 
-		public async Task Update([NotNull]RentalKitchenBla updateRequestBla)
+		public async Task Update(RentalKitchenBla updateRequestBla)
 		{
 			var updateRequestDto = _mapper.Map(updateRequestBla);
-			var existingDto = await _dataContext.RentalKitchens.SingleOrDefaultAsync(x => x.Id == updateRequestDto.Id);
+			var existingDto = await _dataContext.RentalKitchens.Include(x => x.Equipments).SingleOrDefaultAsync(x => x.Id == updateRequestDto.Id);
 
 			existingDto.Name = updateRequestDto.Name == null ? existingDto.Name : updateRequestDto.Name;
 			existingDto.Description = updateRequestDto.Description == null ? existingDto.Description : updateRequestDto.Description;
 			existingDto.RentPricePerMinute = updateRequestDto.RentPricePerMinute == 0 ? existingDto.RentPricePerMinute : updateRequestDto.RentPricePerMinute;
 			existingDto.WorkingArea = updateRequestDto.WorkingArea == 0 ? existingDto.WorkingArea : updateRequestDto.WorkingArea;
 			existingDto.FloorArea = updateRequestDto.FloorArea == 0 ? existingDto.FloorArea : updateRequestDto.FloorArea;
-			existingDto.Equipments = updateRequestDto.Equipments == null ? existingDto.Equipments : updateRequestDto.Equipments;
 
 			_dataContext.RentalKitchens.Update(existingDto);
 

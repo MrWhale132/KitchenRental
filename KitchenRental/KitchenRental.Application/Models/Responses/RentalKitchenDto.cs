@@ -10,6 +10,6 @@ namespace KitchenRental.Application.Models.Responses
 		public int FloorArea { get; set; }
 		public int WorkingArea { get; set; }
 		public double RentPricePerMinute { get; set; }
-		public List<string> Equipments { get; set; }
+		public List<EquipmentDto> Equipments { get; set; }
 	}
 }
