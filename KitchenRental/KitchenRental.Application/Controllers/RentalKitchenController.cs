@@ -1,6 +1,9 @@
-﻿using KitchenRental.Application.Mappers;
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using KitchenRental.Application.Mappers;
+using KitchenRental.Application.Models.Datas.RentalKitchen;
 using KitchenRental.Application.Models.Requests;
-using KitchenRental.Application.Models.Responses;
+using KitchenRental.Application.Models.Responses.RentalKitchen;
 using KitchenRental.BusinessLogic.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,25 +18,47 @@ namespace KitchenRental.Application.Controllers
 		private readonly ILogger<RentalKitchenController> _logger;
 		private readonly IRentalKitchenService _rentalKitchenService;
 		private readonly RentalKitchenRequestToBlaToResponseData _mapper;
+		private readonly RentalKitchenErrorCodeToHttpStatusCode _toHttpStatusCode;
 
-		public RentalKitchenController(IRentalKitchenService rentalKitchenService, RentalKitchenRequestToBlaToResponseData mapper, ILogger<RentalKitchenController> logger)
+		public RentalKitchenController(IRentalKitchenService rentalKitchenService, RentalKitchenRequestToBlaToResponseData mapper, ILogger<RentalKitchenController> logger, RentalKitchenErrorCodeToHttpStatusCode toHttpStatusCode)
 		{
 			_rentalKitchenService = rentalKitchenService;
 			_mapper = mapper;
 			_logger = logger;
+			_toHttpStatusCode = toHttpStatusCode;
 		}
 
 		[HttpGet("kitchenrental/rentalkitchens")]
 		public async Task<IActionResult> GetAll()
 		{
+			//var dynamoDbClient = new AmazonDynamoDBClient();
+
+			//Console.WriteLine($"Hello Amazon Dynamo DB! Following are some of your tables:");
+			//Console.WriteLine();
+
+			//// You can use await and any of the async methods to get a response.
+			//// Let's get the first five tables.
+			//var test = await dynamoDbClient.ListTablesAsync(
+			//	new ListTablesRequest()
+			//	{
+			//		Limit = 5
+			//	});
+
+			//foreach (var table in test.TableNames)
+			//{
+			//	Console.WriteLine($"\tTable: {table}");
+			//	Console.WriteLine();
+			//}
+
+
 			_logger.LogInformation($"{nameof(GetAll)} started processing");
 
 			var kitchensBla = await _rentalKitchenService.GetAll();
 
-			var response = new RentalKitchenResponse<GetAllResponseData>
+			var response = new GetAllResponse
 			{
 				StatusCode = 200,
-				Data = new GetAllResponseData
+				Data = new GetAllData
 				{
 					Kitchens = kitchensBla.Select(_mapper.Map)
 				}
@@ -49,10 +74,10 @@ namespace KitchenRental.Application.Controllers
 		{
 			var kitchenBla = await _rentalKitchenService.GetById(id);
 
-			var response = new RentalKitchenResponse<GetByIdResponseData>
+			var response = new GetByIdResponse
 			{
 				StatusCode = 200,
-				Data = new GetByIdResponseData
+				Data = new GetByIdData
 				{
 					Kitchen = _mapper.Map(kitchenBla)
 				}
@@ -68,10 +93,10 @@ namespace KitchenRental.Application.Controllers
 
 			var reservedId = await _rentalKitchenService.Create(kitchenBla);
 
-			var response = new RentalKitchenResponse<CreateRentalKitchenResponseData>
+			var response = new CreateResponse
 			{
 				StatusCode = 201,
-				Data = new CreateRentalKitchenResponseData
+				Data = new CreateData
 				{
 					ReservedId = reservedId
 				}
@@ -86,27 +111,28 @@ namespace KitchenRental.Application.Controllers
 			var kitchenBla = _mapper.Map(updateRequest);
 			kitchenBla.Id = id;
 
-			await _rentalKitchenService.Update(kitchenBla);
+			var resultCode = await _rentalKitchenService.Update(kitchenBla);
 
-			var response = new RentalKitchenResponse<NoDataResponse>
+			var response = new UpdateResponse
 			{
-				StatusCode = 204
+				StatusCode = (int)_toHttpStatusCode.Map(resultCode),
+				ResultCode = (int)resultCode
 			};
 
-			return new JsonResult(response) { StatusCode = 204 };
+			return new JsonResult(response) { StatusCode = response.StatusCode };
 		}
 
 		[HttpDelete("kitchenrental/rentalkitchens/{id}")]
 		public async Task<IActionResult> Delete([FromRoute] int id)
 		{
-			await _rentalKitchenService.Delete(id);
+			var resultCode = await _rentalKitchenService.Delete(id);
 
-			var response = new RentalKitchenResponse<NoDataResponse>
+			var response = new DeleteResponse
 			{
-				StatusCode = 204
+				StatusCode = (int) resultCode
 			};
 
-			return new JsonResult(response) { StatusCode = 204 };
+			return new JsonResult(response) { StatusCode = response.StatusCode};
 		}
 	}
 }

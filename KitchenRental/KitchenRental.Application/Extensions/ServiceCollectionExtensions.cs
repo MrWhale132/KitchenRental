@@ -39,6 +39,7 @@ namespace KitchenRental.Application.Extensions
 		private static IServiceCollection AddMappers(this IServiceCollection services)
 		{
 			return services
+				  .AddSingleton<RentalKitchenErrorCodeToHttpStatusCode>()
 				  .AddSingleton<RentalKitchenRequestToBlaToResponseData>()
 				  .AddSingleton<RentalKitchenDtoBlaMapper>();
 		}

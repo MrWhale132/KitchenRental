@@ -1,4 +1,6 @@
-﻿using KitchenRental.BusinessLogic.Contracts.DataAccess;
+﻿using KitchenRental.BusinessLogic.Contracts;
+using KitchenRental.BusinessLogic.Contracts.DataAccess;
+using KitchenRental.BusinessLogic.Contracts.OperationResults.RentalKitchen;
 using KitchenRental.BusinessLogic.Contracts.Services;
 using KitchenRental.BusinessLogic.Models.BusinessLogicAdapters;
 using System.Collections.Generic;
@@ -34,15 +36,29 @@ namespace KitchenRental.BusinessLogic.Services
 			return kitchenBla.Id;
 		}
 
-		public async Task Update(RentalKitchenBla kitchenBla)
+		public async Task<RentalKitchenResultCode> Update(RentalKitchenBla kitchenBla)
 		{
+			var existingKitchen = await _rentalKitchenDataManager.GetById(kitchenBla.Id);
+
+			if (existingKitchen is null)
+				return RentalKitchenResultCode.NotFound;
+
 			await _rentalKitchenDataManager.Update(kitchenBla);
+
+			return RentalKitchenResultCode.NoContent;
 		}
 
-		public async Task Delete(int id)
+		public async Task<DeleteResult> Delete(int id)
 		{
+			var existingKitchen = await _rentalKitchenDataManager.GetById(id);
+
+			if (existingKitchen is null)
+				return DeleteResult.NotFound;
+
 			await _rentalKitchenDataManager.Delete(id);
 			_sequenceProvider.Add(id);
+
+			return DeleteResult.NoContent;
 		}
 	}
 }

@@ -8,6 +8,8 @@ namespace KitchenRental.DataAccess.Mappers
 	{
 		public RentalKitchenBla Map(RentalKitchenDto dto)
 		{
+			if (dto is null) return null;
+
 			return new RentalKitchenBla
 			{
 				Id = dto.Id,
