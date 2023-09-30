@@ -1,11 +1,12 @@
 ﻿using KitchenRental.Application.Models.Contracts.RentalKitchen;
-using KitchenRental.Application.Models.Requests;
+using KitchenRental.Application.Models.Requests.RentalKitchen;
 using KitchenRental.BusinessLogic.Models.BusinessLogicAdapters;
+using KitchenRental.BusinessLogic.Models.Requests;
 using System.Linq;
 
-namespace KitchenRental.Application.Mappers
+namespace KitchenRental.Application.Mappers.Models
 {
-    public class RentalKitchenRequestToBlaToResponseData
+	public class KitchenMapper
 	{
 		public RentalKitchenBla Map(CreateRentalKitchenRequest request)
 		{
@@ -33,16 +34,32 @@ namespace KitchenRental.Application.Mappers
 			};
 		}
 
+		public EquipKitchenRequestBla Map(EquipKitchenRequest request)
+		{
+			return new EquipKitchenRequestBla
+			{
+				EquipmentIds = request.EquipmentIds
+			};
+		}
+
+		public RemoveEquipmentsRequestBla Map(RemoveEquipmentsRequest request)
+		{
+			return new RemoveEquipmentsRequestBla
+			{
+				EquipmentIds = request.EquipmentIds
+			};
+		}
+
 		public RentalKitchenContract Map(RentalKitchenBla bla)
 		{
-			if(bla is null) return null;
+			if (bla is null) return null;
 
 			return new RentalKitchenContract
 			{
 				Id = bla.Id,
 				Description = bla.Description,
 				WorkingArea = bla.WorkingArea,
-				Equipments = bla.Equipments?.Select(x => new EquipmentContract { Id = x.Id, Name = x.Name }).ToList(),
+				Equipments = bla.Equipments?.Select(x => new EquipmentContract { Id = x.Id, Name = x.Name, KitchenId = x.KitchenId }).ToList(),
 				FloorArea = bla.FloorArea,
 				Name = bla.Name,
 				RentPricePerMinute = bla.RentPricePerMinute

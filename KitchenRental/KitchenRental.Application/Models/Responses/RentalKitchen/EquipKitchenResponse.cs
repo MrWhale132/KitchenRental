@@ -2,12 +2,12 @@
 
 namespace KitchenRental.Application.Models.Responses.RentalKitchen
 {
-	public class DeleteResponse
+	public class EquipKitchenResponse
 	{
 		public int StatusCode { get; set; }
 		public string StatusMessage { get; set; }
 		public int ResultCode { get; set; }
 		public string ResultMessage { get; set; }
-		public DeleteData Data { get; set; }
+		public EquipKitchenData Data { get; set; }
 	}
 }

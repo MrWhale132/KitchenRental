@@ -13,5 +13,15 @@ namespace KitchenRental.DataAccess
 		public DbSet<RentalKitchenDto> RentalKitchens { get; set; }
 		public DbSet<EquipmentDto> Equipments { get; set; }
 
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.Entity<RentalKitchenDto>()
+				.HasMany(e => e.Equipments)
+				.WithOne()
+				.HasForeignKey(e => e.RentalKitchenDtoId);
+
+			base.OnModelCreating(modelBuilder);
+		}
+
 	}
 }

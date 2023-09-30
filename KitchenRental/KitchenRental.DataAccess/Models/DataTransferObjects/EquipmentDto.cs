@@ -11,5 +11,6 @@ namespace KitchenRental.DataAccess.Models.DataTransferObjects
 		[Required]
 		[StringLength(50)]
 		public string Name { get; set; }
+		public int? RentalKitchenDtoId { get; set; }
 	}
 }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace KitchenRental.DataAccess.Mappers
 {
-	public class RentalKitchenDtoBlaMapper
+	public class KitchenDaoMapper
 	{
 		public RentalKitchenBla Map(RentalKitchenDto dto)
 		{
@@ -14,7 +14,7 @@ namespace KitchenRental.DataAccess.Mappers
 			{
 				Id = dto.Id,
 				Description = dto.Description,
-				Equipments = dto.Equipments?.Select(x => new EquipmentBla { Id = x.Id, Name = x.Name }).ToList(),
+				Equipments = dto.Equipments?.Select(x => new EquipmentBla { Id = x.Id, Name = x.Name, KitchenId = x.RentalKitchenDtoId }).ToList(),
 				FloorArea = dto.FloorArea,
 				Name = dto.Name,
 				RentPricePerMinute = dto.RentPricePerMinute,

@@ -1,13 +1,12 @@
-﻿using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using KitchenRental.Application.Mappers;
+﻿using Azure;
+using KitchenRental.Application.Mappers.ErrorCodes;
+using KitchenRental.Application.Mappers.Models;
 using KitchenRental.Application.Models.Datas.RentalKitchen;
-using KitchenRental.Application.Models.Requests;
+using KitchenRental.Application.Models.Requests.RentalKitchen;
 using KitchenRental.Application.Models.Responses.RentalKitchen;
 using KitchenRental.BusinessLogic.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,10 +16,10 @@ namespace KitchenRental.Application.Controllers
 	{
 		private readonly ILogger<RentalKitchenController> _logger;
 		private readonly IRentalKitchenService _rentalKitchenService;
-		private readonly RentalKitchenRequestToBlaToResponseData _mapper;
-		private readonly RentalKitchenErrorCodeToHttpStatusCode _toHttpStatusCode;
+		private readonly KitchenMapper _mapper;
+		private readonly KitchenServiceResultCodeToHttpStatusCode _toHttpStatusCode;
 
-		public RentalKitchenController(IRentalKitchenService rentalKitchenService, RentalKitchenRequestToBlaToResponseData mapper, ILogger<RentalKitchenController> logger, RentalKitchenErrorCodeToHttpStatusCode toHttpStatusCode)
+		public RentalKitchenController(IRentalKitchenService rentalKitchenService, KitchenMapper mapper, ILogger<RentalKitchenController> logger, KitchenServiceResultCodeToHttpStatusCode toHttpStatusCode)
 		{
 			_rentalKitchenService = rentalKitchenService;
 			_mapper = mapper;
@@ -87,7 +86,7 @@ namespace KitchenRental.Application.Controllers
 		}
 
 		[HttpPost("kitchenrental/rentalkitchens")]
-		public async Task<IActionResult> Create([FromBody] CreateRentalKitchenRequest kitchenRequest)
+		public async Task<IActionResult> Create([FromBody] CreateRentalKitchenRequest kitchenRequest) //TODO: map the request into a requestBla instead
 		{
 			var kitchenBla = _mapper.Map(kitchenRequest);
 
@@ -106,7 +105,7 @@ namespace KitchenRental.Application.Controllers
 		}
 
 		[HttpPatch("kitchenrental/rentalkitchens/{id}")]
-		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalKitchenRequest updateRequest)
+		public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateRentalKitchenRequest updateRequest) // same here
 		{
 			var kitchenBla = _mapper.Map(updateRequest);
 			kitchenBla.Id = id;
@@ -129,10 +128,43 @@ namespace KitchenRental.Application.Controllers
 
 			var response = new DeleteResponse
 			{
-				StatusCode = (int) resultCode
+				StatusCode = (int)_toHttpStatusCode.Map(resultCode),
+				ResultCode = (int)resultCode
 			};
 
-			return new JsonResult(response) { StatusCode = response.StatusCode};
+			return new JsonResult(response) { StatusCode = response.StatusCode };
+		}
+
+		[HttpPost("kitchenrental/rentalkitchens/{kitchenId}/equipments")]
+		public async Task<IActionResult> EquipKitchen([FromRoute] int kitchenId, [FromBody] EquipKitchenRequest request)
+		{
+			var requestBla = _mapper.Map(request);
+
+			var resultCode = await _rentalKitchenService.EquipKitchen(kitchenId, requestBla);
+
+			var response = new EquipKitchenResponse
+			{
+				StatusCode = (int)_toHttpStatusCode.Map(resultCode),
+				ResultCode = (int)resultCode
+			};
+
+			return new JsonResult(response) { StatusCode = response.StatusCode };
+		}
+
+		[HttpDelete("kitchenrental/rentalkitchens/{kitchenId}/equipments")]
+		public async Task<IActionResult> RemoveEquipments([FromRoute] int kitchenId, [FromBody] RemoveEquipmentsRequest request)
+		{
+			var requestBla = _mapper.Map(request);
+
+			var resultCode = await _rentalKitchenService.RemoveEquipments(kitchenId, requestBla);
+
+			var response = new EquipKitchenResponse
+			{
+				StatusCode = (int)_toHttpStatusCode.Map(resultCode),
+				ResultCode = (int)resultCode
+			};
+
+			return new JsonResult(response) { StatusCode = response.StatusCode };
 		}
 	}
 }
