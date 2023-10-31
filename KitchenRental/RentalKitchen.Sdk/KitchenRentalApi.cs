@@ -16,7 +16,7 @@ namespace KitchenRental.Sdk
 
 		public KitchenRentalApi()
 		{
-			HttpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7181") };
+			HttpClient = new HttpClient { BaseAddress = new Uri("https://localhost:2001") };
 		}
 
 		public async Task<IEnumerable<RentalKitchenDto>> GetAll()

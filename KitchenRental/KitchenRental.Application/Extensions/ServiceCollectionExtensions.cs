@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KitchenRental.Application.Extensions
 {
-    public static class ServiceCollectionExtensions
+	public static class ServiceCollectionExtensions
 	{
 		public static IServiceCollection AddApplicationLayer(this IServiceCollection services, IConfiguration config)
 		{

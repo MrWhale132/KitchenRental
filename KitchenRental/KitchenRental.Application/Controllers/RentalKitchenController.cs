@@ -88,6 +88,8 @@ namespace KitchenRental.Application.Controllers
 		[HttpPost("kitchenrental/rentalkitchens")]
 		public async Task<IActionResult> Create([FromBody] CreateRentalKitchenRequest kitchenRequest) //TODO: map the request into a requestBla instead
 		{
+			_logger.LogInformation($"{nameof(Create)} service in {nameof(RentalKitchenController)} starts processing");
+
 			var kitchenBla = _mapper.Map(kitchenRequest);
 
 			var reservedId = await _rentalKitchenService.Create(kitchenBla);
