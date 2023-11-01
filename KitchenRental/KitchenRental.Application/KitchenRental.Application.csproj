@@ -7,7 +7,7 @@
     <IsPackable>true</IsPackable>
     <UserSecretsId>1a86c99e-a40b-471e-888b-ff0c91e5e186</UserSecretsId>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.200.22" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
@@ -25,4 +25,9 @@
     <ProjectReference Include="..\RentalKitchen.Sdk\KitchenRental.Sdk.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include=".\sequence.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
